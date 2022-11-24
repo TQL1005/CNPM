@@ -1,0 +1,14 @@
+*{
+    font-family : Tahoma;
+}
+
+    h1.subject {
+        text-align:center;
+        }
+body {
+    background-color : white;
+    color: darkblue;}
+img {
+  max-width: 100%;
+  height: auto;
+}
