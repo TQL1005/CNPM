@@ -7,9 +7,8 @@ from enum import Enum as UserEnum
 
 
 class UserRole(UserEnum):
-    USER = 1
-    EMPLOYEE = 2
-    ADMIN = 3
+    EMPLOYEE = 1
+    ADMIN = 2
 
 
 class BaseModel(db.Model):
@@ -74,15 +73,12 @@ class ChuyenBay(BaseModel):
 class User(BaseModel):
     name = Column(String(10), nullable=False)
     lastName = Column(String(50), nullable=False)
-    cccd = Column(String(12), nullable=False)
-    sdt = Column(String(12), nullable=False)
     username = Column(String(50), nullable=False)
     password = Column(String(50), nullable=False)
     avatar = Column(String(100), nullable=False)
     active = Column(Boolean, default=True)
-    user_role = Column(Enum(UserRole), default=UserRole.USER)
+    user_role = Column(Enum(UserRole), default=UserRole.EMPLOYEE)
     ve = relationship('Ve', backref='nhan_vien', lazy=True)
-    ve_id = Column(Integer, ForeignKey('ve.id'), nullable=False)
     chuyenBay_id = Column(Integer, ForeignKey(ChuyenBay.id), nullable=False)
     def  __str__(self):
         return self.name
@@ -115,16 +111,17 @@ class Ve(BaseModel):
         return self.name
 
 
-# class KhachHang(BaseModel):
-#     name = Column(String(10), nullable=False)
-#     lastName = Column(String(50), nullable=False)
-#     cccd = Column(String(12), nullable=False)
-#     sdt = Column(String(12), nullable=False)
-#     ve_id = Column(Integer, ForeignKey(Ve.id), nullable=False)
-#     chuyenBay_id = Column(Integer, ForeignKey(ChuyenBay.id), nullable=False)
-#
-#     def __str__(self):
-#         return self.name
+class KhachHang(BaseModel):
+    name = Column(String(10), nullable=False)
+    lastName = Column(String(50), nullable=False)
+    cccd = Column(String(12), nullable=False)
+    hinh_cccd = Column(String(100), nullable=False)
+    sdt = Column(String(12), nullable=False)
+    ve_id = Column(Integer, ForeignKey(Ve.id), nullable=False)
+    chuyenBay_id = Column(Integer, ForeignKey(ChuyenBay.id), nullable=False)
+
+    def __str__(self):
+        return self.name
 
 
 if __name__ == '__main__':
