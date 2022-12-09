@@ -65,6 +65,7 @@ class ChuyenBay(BaseModel):
     khach_hang = relationship('KhachHang', backref='chuyen_bay', lazy=True)
     san_bay_trung_gian = relationship('SanBay', secondary='sb_trunggian', lazy=True, backref=backref('chuyen_bay', lazy=True))
     may_bay=relationship('MayBay', secondary='may_bay_thuoc_chuyen_bay', lazy=True, backref=backref('chuyen_bay', lazy=True))
+    created_date = Column(DateTime, nullable=False)
 
     def __str__(self):
         return self.name
