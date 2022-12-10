@@ -5,6 +5,7 @@ from flask_login import UserMixin
 from datetime import datetime
 from enum import Enum as UserEnum
 import datetime
+import hashlib
 
 
 class UserRole(UserEnum):
@@ -73,7 +74,7 @@ class ChuyenBay(BaseModel):
         return self.name
 
 
-class User(BaseModel):
+class User(BaseModel, UserMixin):
     name = Column(String(10), nullable=False)
     lastName = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False)
@@ -82,7 +83,6 @@ class User(BaseModel):
     active = Column(Boolean, default=True)
     user_role = Column(Enum(UserRole), default=UserRole.EMPLOYEE)
     ve = relationship('Ve', backref='nhan_vien', lazy=True)
-    chuyenBay_id = Column(Integer, ForeignKey(ChuyenBay.id), nullable=False)
     def  __str__(self):
         return self.name
 
@@ -130,7 +130,13 @@ class KhachHang(BaseModel):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        #tdb = ThoiDiemBay(ngay_gio_bay= datetime.datetime.strptime('2022-12-10 14:09:01', '%Y-%m-%d %H:%M:%S'), thoi_gian_bay= (datetime.datetime.strptime('2022-12-10 16:09:01', '%Y-%m-%d %H:%M:%S') - datetime.datetime.strptime('2022-12-10 14:09:01', '%Y-%m-%d %H:%M:%S')))
         tdb = ThoiDiemBay(ngay_gio_bay=datetime.datetime(2022,12,10,14,9,1), thoi_gian_bay= (datetime.datetime(2022, 12,10,16,9,1) - datetime.datetime(2022,12,10,14,9,1)).total_seconds()/3600)
-        db.session.add(tdb)
+        sb1 = SanBay(name="Tp.HCM", city="Tp.HCM", country="VN")
+        sb2 = SanBay(name="Ha Noi", city="Ha Noi", country="VN")
+        mb = MayBay(name="xxx")
+        db.session.add_all([tdb, sb1, sb2, mb])
+        db.session.commit()
+        password = str(hashlib.md5('123'.encode('utf-8')).hexdigest())
+        u1 = User(name="thao", lastName="thao", username="thao", password=password, avatar="asa")
+        db.session.add(u1)
         db.session.commit()

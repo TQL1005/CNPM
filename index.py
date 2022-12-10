@@ -39,6 +39,12 @@ def login_my_user():
     return render_template('login.html')
 
 
+@app.route('/logout')
+def logout_my_user():
+    logout_user()
+    return redirect('/login')
+
+
 @login.user_loader
 def load_user(user_id):
     return dao.get_user_by_id(user_id)
