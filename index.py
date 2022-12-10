@@ -13,6 +13,12 @@ def home():
 def searchChuyenBay():
     return render_template('search.html')
 
+
+@app.route('/banve')
+def ban_ve():
+    return render_template('banve.html')
+
+
 '''
 @app.route('/login', methods=['post'])
 def admin_login():
