@@ -42,7 +42,7 @@ class SanBay(BaseModel):
 
 class ThoiDiemBay(BaseModel):
     ngay_gio_bay=Column(DateTime, nullable=False)
-    thoi_gian_bay=Column(DateTime, nullable=False)
+    thoi_gian_bay=Column(Float, nullable=False)
     thoi_gian_dung=Column(DateTime, nullable=True)
     chuyenbay=relationship('ChuyenBay', backref='thoi_diem_bay', lazy=True)
     def __str__(self):
@@ -130,6 +130,7 @@ class KhachHang(BaseModel):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        tdb = ThoiDiemBay(ngay_gio_bay= datetime.datetime.strptime('2022-12-10 14:09:01', '%Y-%m-%d %H:%M:%S'), thoi_gian_bay= datetime.datetime.strptime('2022-12-10 16:09:01', '%Y-%m-%d %H:%M:%S'))
+        #tdb = ThoiDiemBay(ngay_gio_bay= datetime.datetime.strptime('2022-12-10 14:09:01', '%Y-%m-%d %H:%M:%S'), thoi_gian_bay= (datetime.datetime.strptime('2022-12-10 16:09:01', '%Y-%m-%d %H:%M:%S') - datetime.datetime.strptime('2022-12-10 14:09:01', '%Y-%m-%d %H:%M:%S')))
+        tdb = ThoiDiemBay(ngay_gio_bay=datetime.datetime(2022,12,10,14,9,1), thoi_gian_bay= (datetime.datetime(2022, 12,10,16,9,1) - datetime.datetime(2022,12,10,14,9,1)).total_seconds()/3600)
         db.session.add(tdb)
         db.session.commit()
