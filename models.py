@@ -43,7 +43,7 @@ class SanBay(BaseModel):
 class ThoiDiemBay(BaseModel):
     ngay_gio_bay=Column(DateTime, nullable=False)
     thoi_gian_bay=Column(Float, nullable=False)
-    thoi_gian_dung=Column(DateTime, nullable=True)
+    thoi_gian_dung=Column(Float, nullable=True)
     chuyenbay=relationship('ChuyenBay', backref='thoi_diem_bay', lazy=True)
     def __str__(self):
         return self.name
