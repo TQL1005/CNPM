@@ -69,7 +69,7 @@ class ChuyenBay(BaseModel):
     khach_hang = relationship('KhachHang', backref='chuyen_bay', lazy=True)
     san_bay_trung_gian = relationship('SanBay', secondary='sb_trunggian', lazy=True, backref=backref('chuyen_bay', lazy=True))
     may_bay=relationship('MayBay', secondary='may_bay_thuoc_chuyen_bay', lazy=True, backref=backref('chuyen_bay', lazy=True))
-    created_date = Column(DateTime, nullable=False)
+    created_date = Column(DateTime, default=datetime.datetime.now())
 
     def __str__(self):
         return self.name
@@ -80,6 +80,7 @@ class User(BaseModel, UserMixin):
     lastName = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False)
     password = Column(String(50), nullable=False)
+    created_date = Column(DateTime, default=datetime.datetime.now())
     avatar = Column(String(100), nullable=False)
     active = Column(Boolean, default=True)
     user_role = Column(Enum(UserRole), default=UserRole.EMPLOYEE)

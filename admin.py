@@ -1,21 +1,48 @@
-from CNPM.models import ChuyenBay, TuyenBay, User, SanBay, ThoiDiemBay, MayBay, HangVe, Ve, KhachHang
+from CNPM.models import ChuyenBay, TuyenBay, User, SanBay, ThoiDiemBay, MayBay, HangVe, Ve, KhachHang, ChuyenBayCoSanBayTrungGian, MayBayThuocChuyenBay, UserRole
 from CNPM import db, app, admin
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
-from flask_login import current_user
+from flask_login import current_user, logout_user
+from flask import redirect
 from wtforms import TextAreaField
 from wtforms.widgets import TextArea
 
 
-admin.add_view(ModelView(User, db.session))
-admin.add_view(ModelView(SanBay, db.session))
-admin.add_view(ModelView(KhachHang, db.session))
-admin.add_view(ModelView(ThoiDiemBay, db.session))
-admin.add_view(ModelView(MayBay, db.session))
-admin.add_view(ModelView(ChuyenBay, db.session))
-admin.add_view(ModelView(TuyenBay, db.session))
-admin.add_view(ModelView(HangVe, db.session))
-admin.add_view(ModelView(Ve, db.session))
+class AuthenticatedModalView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
+
+
+class AuthenticatedModalViewNV(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+
+class AuthenticatedBaseView(BaseView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+
+class LogoutView(AuthenticatedBaseView):
+    @expose('/')
+    def index(self):
+        logout_user()
+        return redirect('/admin')
+
+
+
+admin.add_view(AuthenticatedModalView(User, db.session, name='Người dùng'))
+admin.add_view(AuthenticatedModalView(SanBay, db.session, name='Sân bay'))
+admin.add_view(AuthenticatedModalViewNV(KhachHang, db.session, name='Khách hàng'))
+admin.add_view(AuthenticatedModalView(ThoiDiemBay, db.session, name='Thời điểm bay'))
+admin.add_view(AuthenticatedModalView(MayBay, db.session, name='Máy bay'))
+admin.add_view(AuthenticatedModalViewNV(ChuyenBay, db.session, name='Chuyến bay'))
+admin.add_view(AuthenticatedModalViewNV(TuyenBay, db.session, name='Tuyến bay'))
+admin.add_view(AuthenticatedModalViewNV(HangVe, db.session, name='Hạng vé'))
+admin.add_view(AuthenticatedModalViewNV(Ve, db.session, name='Vé'))
+admin.add_view(LogoutView(name="Đăng xuất"))
+# admin.add_view(ModelView(ChuyenBayCoSanBayTrungGian, db.session))
+# admin.add_view(ModelView(MayBayThuocChuyenBay, db.session))
 
 
 class StatsView(BaseView):

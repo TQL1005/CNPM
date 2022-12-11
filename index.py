@@ -20,16 +20,16 @@ def ban_ve():
     return render_template('banve.html')
 
 
-'''
-@app.route('/login', methods=['post'])
+
+@app.route('/admin-login', methods=['post'])
 def admin_login():
     username = request.form['username']
     password = request.form['password']
     user = dao.auth_user(username=username, password=password)
     if user:
         login_user(user=user)
-    return render_template('login.html')
-'''
+    return redirect('/admin')
+
 
 
 @app.route("/login", methods=['get', 'post'])
