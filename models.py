@@ -42,6 +42,7 @@ class SanBay(BaseModel):
 
 
 class ThoiDiemBay(BaseModel):
+    name = Column(String(50), nullable=False)
     ngay_gio_bay=Column(DateTime, nullable=False)
     thoi_gian_bay=Column(Float, nullable=False)
     thoi_gian_dung=Column(Float, nullable=True)
@@ -95,6 +96,7 @@ class MayBay(BaseModel):
 
 
 class HangVe(BaseModel):
+    name = Column(String(50), nullable=False)
     price = Column(Float, default=0)
     so_luong_con_lai = Column(Integer, default=80)
     mayBay_id = Column(Integer, ForeignKey(MayBay.id), nullable=False)
@@ -130,7 +132,7 @@ class KhachHang(BaseModel):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        tdb = ThoiDiemBay(ngay_gio_bay=datetime.datetime(2022,12,10,14,9,1), thoi_gian_bay= (datetime.datetime(2022, 12,10,16,9,1) - datetime.datetime(2022,12,10,14,9,1)).total_seconds()/3600)
+        tdb = ThoiDiemBay(name= "Thời điểm bay TpHCM-HaNoi",ngay_gio_bay=datetime.datetime(2022,12,10,14,9,1), thoi_gian_bay= (datetime.datetime(2022, 12,10,16,9,1) - datetime.datetime(2022,12,10,14,9,1)).total_seconds()/3600)
         sb1 = SanBay(name="Tp.HCM", city="Tp.HCM", country="VN")
         sb2 = SanBay(name="Ha Noi", city="Ha Noi", country="VN")
         mb = MayBay(name="xxx")

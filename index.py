@@ -2,6 +2,7 @@ from flask import render_template, Flask, request, redirect
 from CNPM import dao, app, login, admin #, utils
 from flask_login import login_user, logout_user, current_user, login_required
 from CNPM.decorators import annonymous_user
+from CNPM.admin import *
 
 
 @app.route("/")
