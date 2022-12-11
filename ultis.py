@@ -1,7 +1,7 @@
 import json, os
-#from CNPM.models import ChuyenBay
+from CNPM.models import ChuyenBay
 from flask_login import current_user
-#from CNPM import db
+from CNPM import db
 
 def read_json(path):
     with open(path, "r") as f:
