@@ -144,10 +144,10 @@ if __name__ == '__main__':
         u2 = User(name="admin", lastName="admin", username="admin", password=password, avatar="sas", user_role=UserRole.ADMIN)
         db.session.add_all([u1,u2])
         db.session.commit()
-        tb1 = TuyenBay(name="Tuyến bay TP.HCM-HaNoi")
+        tb1 = TuyenBay(name="TP.HCM-HaNoi")
         db.session.add_all([tb1])
         db.session.commit()
-        cb1 = ChuyenBay(name="Chuyến bay TP.HCM-HaNoi", sanBayDi_id=sb1.id, sanBayDen_id=sb2.id, thoiDiemBay_id=tdb.id,
+        cb1 = ChuyenBay(name="TP.HCM-HaNoi", sanBayDi_id=sb1.id, sanBayDen_id=sb2.id, thoiDiemBay_id=tdb.id,
                         tuyenBay_id=tb1.id)
         db.session.add_all([cb1])
         db.session.commit()
