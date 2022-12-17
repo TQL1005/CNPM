@@ -1,0 +1,86 @@
+{% extends "layout/base.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<!-- Body -->
+
+<div class="align-items-center d-flex py-5 cover section-fade-in-out bg-image "
+     style="background-image: url('https://lh3.googleusercontent.com/yYYcssHuA8rL1RKw43aYeyYxOdainw5iieqb3tFarV_hy1KzUibQLAJYeEQWRqksRhjXo1YHZjjg1rW2LlrzqS1L76InV4_Q9WqyQ-KRfai4wK7nUJGX_EllqtAqejbI7DmkY5aMVQNDb1nHB1lRyH_G4rFwoMxnD25I6Hhg9dRodPrXnT2epWfXFIyzP2_HOk5vZjY9tyFUTwTh1HJah96vW-udm1i7yE_i2A4YcTyoncoMS-B--srfgcikguPwfgI682ods4i-VkLMmQoMs1e7iPS0xFqGdiYTLyPQXUftGDoWEK3_MxnOInNlvhVleDpzdl3EKCVkgT6E8faK8JeEIc1w8sTD7Qtu27c0aW0jCbOHb1WroIdab3EGhIfIM78sD6sbjvsX6dkLhjyuwukeG4xVPrFZIYEkHTAQIC4X--7kPGDei9vr3eJsD0iYfuXebbk7o6dxw4f6LIIFKq8Rmk8PlOQENBv3n1YqqA9mnuEAWgw4f-XTjrKsP13FM1mkP2RGLJY2ODcJ1uV2JF3a_APbI2vNgm-ODRW1s15wqEtKISxnqJBFk09Hd4t4DUNX8udsYKEyKsvjRxIEwhXeqYM5ks_0TEi-q1pialCVj2nyQ6WzABiRXCo15Gk7ZZAARrYmh2bpvF8TWu5DAfHdQy8nEkJ539axKg_XsCMmIso-9LsxpuwoU6AxDx5XYnKhJqujv985eXBgqZVENGkCFJb8jPd8ZWhZSZvoMOjHv_B9s0ASAoPQtubTUXjkUKjGJLJcFCD_1KtQ-54eE779hrFsOR5x5HBeW_ZH7tlh-TmRaPyBPKJ8tJCCV2ydbOa8Zq_dRuGR0N9W-s347yw1bZDK-kUBELFM54GUmGTvSVWB6hILYyRk9PnjJRL4T4cPlyqCwdMBQkMmQR_Pz9rjWxNELiHz80D95ozuVaJD4ZIqWQg9QS0X6Zv9R3e4hd25bdfS9wkrW61TKST9TRyXHKN5GcYXdsP7Iq0FHWAcQyoodhED=w800-h402-no?authuser=2');"
+     height: 100vh;>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 align-self-center text-lg-left text-center" style="">
+                <h1 class="mb-0 mt-4 display-4 text-center">ĐẶT VÉ MÁY BAY GIÁ RẺ</h1>
+            </div>
+            <div class="col-lg-5 p-3" style="">
+                <form class="p-4" method="get">
+                    <h4 class="mb-4 text-center" contenteditable="true" style="	border-color: none;">
+                        <mark class="secondary shadowed">ĐẶT VÉ MÁY BAY GIÁ RẺ</mark>
+                    </h4>
+                    <div class="form-group"><label>Điểm đi</label style="width:100%">
+                        <!--                        <select name="di" id="diem_di" data-live-search="true" class="selectpicker" class="form-control" title="chọn điểm đi">-->
+                        <!--                            <option value="1">Mustard</option>-->
+                        <!--                            <option value="2">Ketchup</option>-->
+                        <!--                            <option value="3">Barbecue</option>-->
+                        <!--                        </select>-->
+                        <select name="di" id="diem_di" onchange="changeFunc()" class="selectpicker form-control" data-live-search="true"
+                                title="Chọn điểm đi">
+                            {% for san_bay in list_san_bay %}
+                            <option value="{{ san_bay.name }}">{{ san_bay.name }}</option>
+                            {% endfor %}
+                        </select>
+
+
+
+                    </div>
+                    <div class="form-group"><label>Điểm đến</label>
+                        <select name="den" id="diem_den" class="selectpicker form-control" data-live-search="true"
+                                title="Chọn điểm đến">
+                            {% for san_bay in list_san_bay %}
+                            <option value='{{ san_bay.name }}'>{{ san_bay.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <a href="{{ url_for('tuyen_bay') }}" class="button btn mt-4 btn-block btn-info shadowed text-center w-100 p-2 text-body btn-lg" onclick="addToCart()" >Tìm vé</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+</script>
+<!-- Intro -->
+<div class="bg-dark py-5 pb-2">
+    <div class="container w-100">
+        <div class="row shadowed bg-secondary w-100">
+            <div class="p-4 col-md-6 bg-primary animate-in-left" style="">
+                <p class="m-0">Câu chuyện về chúng tôi</p>
+                <h2 class="mb-3">Travel-QiaoT</h2> <i class="fa d-inline-block fa-star text-white"></i><i
+                    class="fa d-inline-block fa-star mx-2 text-white"></i><i
+                    class="fa d-inline-block fa-star text-white"></i>
+                <p class="my-4">Là một người đam mê du lịch, chắc hẳn ai cũng muốn sở hữu cho mình những tấm vé máy bay
+                    giá rẻ để tiết kiệm chi phí đi lại. Bản thân mình là một người rất đam mê du lịch, và tiêu chí du
+                    lịch giá rẻ luôn được mình đặt lên hàng đầu. Vậy làm thế nào để săn được những tấm vé máy bay giá rẻ
+                    0 đồng, vé máy bay 49k, vé máy bay 99k, … của các hãng hàng không Vietnam Airlines, Vietjet Air,
+                    Bamboo Airways, Pacific Airlines và Vietravel Airlines. Hãy tham khảo ngay kinh nghiệm săn vé bằng
+                    cách canh khuyến mãi của TravelQiaoT ngay nhé.</p>
+                <img class="img-fluid d-block "
+                     src="https://lh3.googleusercontent.com/BV-yY6emiJMBlyl9OHcf6TfY-Gm6MBjcu7zI6Sc4uqqwH5WAu6uL9MbEIiMRAsBh2TNOYVm5c0L_4Xl-YMPz3C1yJEqCkljW_kJfz9DA2cSK0KCerM7nFDwSUAVi9qJmQsSTOFbO8tTi3ScifWvLA1YmDlZf69IbXstgjzYVul_PAdAf0rNmDK6dzv1Y7yMXvvYMgvMgHhe2rziL8Y2bcoinw_Ck_PiL5RAFra0UxvIfFRa0vYxqwZwmUwim09MJm_ZF8UbciDNbovHQBaMjtsDAeX-6kOTcZFWy8VTzfH8M_CoW2X_7i2lC8ao9pMh96_ZTiODmcBgI6qOeo6nRY8KKjHjT88G5Cuyruv8BX1zVt_i-C7_bGDuN-mfUTj7wqZgUiK3YVz7g5Fw0DCqjNaRAMhU0LJVYtlVRZOBLja-VfK5T-R62WnsnOVKb3SjOpsRX3cCfs7_HN2e1ZwS66dyqOO5v2TDCdwSsdhGBUZFRYpOuodWjci--OQ2xdB1oym2NMQcHPkjrsTaNVcjtjJx9witSuK-ktGAOmAYtVQa3UVrR6j2mv6JI7JlIem1mIH28uv3lzF5w6y4ku6typwSNOGy5Ax1K51pZjqepMh62BGSzGR5BpGLJvq2XYaPsPs38G24B8uJSbRXN9CQqMuEkrAeorpqlVsc0dKafmNzjwXkIUrPyQ4wLGAmwUANJj-N6RMToqOmETVaOtb4E73TpcECmFYSBTWD07f06GtW4j9UVYBRDhF51tauXHLZNe5hTucPYqTbZJBkTSgK8KwqOHS6uLy8DlUbzWLYex-mJNWD0PpstkqexM9tgrqmFsobdTvXkO4L1-nhGufJ_Zo15N4ZiyQJY13k17lPwb4iYvNj9BJJAIVnLvxHHOITYMjlIQ9XvRRFo1Fu8Ouvykl_C8HnnCAR8OkjxFqm8cyg-3uGOEamLu2DWgB4cLrPSwQ7vm0iScj4KUa59dc3FVvCuF9IBsSjn2TM7QUDMNVtn_jtzBVZM=w500-h159-no?authuser=2"
+                     width="300">
+            </div>
+            <div class="p-0 animate-in-right col-12 w-100 col-md-6 col-sm-3" style="">
+                <img class="img-fluid d-block mx-auto"
+                     src="https://lh3.googleusercontent.com/6NofQUMUMKR10BHhDo3gFS89LM4-LPu6PLfP9rzzA7A2q-TxYuItKY8S-IUgCiJQ7zT1fNbv2UQXuPcUMf6rrOHMCW4lCbONVoUwjARsgf7jcNw53cY_mHlMJuIBYJVvATsHaTgCt-KUdktyQCu8ybfFo7OJBadCn4D8t389FTxtgsGPG4xDLXfpf5nVprfb1-AmAvR2GD0dxJ7NIXSkRxRMCG2OGG6bxGyKXNsAh7IJBga_54wYV89aQO8QtL5wccRqPTpdXzcPPoN-eQx38Vm7AYqSN41iYgox8vHQ3HTXoUmP_CFlbOsMb4vAK0o1_8XyNw0O0TdsXojHJKpZshxJLrstiDccykWrF86XDcbiQ6OkSDlS9MxxCyd_segkYX6V1_t0d3Zmy4btzTgdcbeboeDHLL0v6iVd2eDGfnQDZct4h-34700yfvVfTOrhBF-1vYIotvurXJbkV8HJ1XaSEplpfFTPH_7mZXjWyO4BQVh_dCTxKyvExTveTOjcv3XflKN9IruAMA5r3ZkwFAmzScQvuCkjbq9Hl8DTp50H3K-pno9SWGlkXfVdv0qwlXQoZv_mYlSiY57l0Fh6Ebaf5h2nyi_B54T_bs6rWiV8d_UoN96C4umNOfe0nW6iVJCIT0LTSSnkDslK9RwxopFJ-T7_dJRK8vxTQEOhOK7cOKdea1cfnk8aBGGApYVOifHGVSNn_pKJmUyUBCysdLk0OqBU1gJbOULQGqeqFHgB_xx-6jFnT2YGuIky5rVkfJvpRz4y3vDCpNgBFV55iFZj3ILO65TfTHJ56OjlTzz873s_bhp8UBEWRmWsqh0VN3GPCZYUgXh4fsLbCWaYRHgdjacVA8xmacYkwnEcyRM1eo6YyzmFquI4_NyPM3xiAlXpD3mC9TWUkDnoFBY9VwkgsA7acZrjoTcwR5ygKRxpc4ownMsHDyOxzSgzDuSQn1nm8ZWf-539rknals7F22dhf1Ra_Bz6xPMSWkPI1OiT3zjTc3ku=w1200-h800-no?authuser=2"
+                     width="100%" height="100%" style="">
+                <img class="img-fluid d-block  mx-auto"
+                     src="https://lh3.googleusercontent.com/NYRvF7py4Y-7bmsII1X-R7LUgjWsoclYBc8TCxfXj9bzIBPVi0o8C8osW0Cg8l0-oBn7Kc6oJJx0fJWIeDkWrKjq4vrnhr2d2p-_-0whq75AVnZdE4P5XgJ0BZnTvE1M8OsVSbBvlCsH46MF0hjuZITCc6dKlFJnV4C327lYUJOtYVB2v_epXF5OfLgbYvP7h0T2vuIKHpqcS-x3obuO81I0vWdOC52VaoBhs5g-kNOum6PtsY__xzpLB811_MxN8A3BWVHXR_dHy1j6tsGvW8pDknVemDfqBzDVry2WIzL0pPGc48YbGXyTvvmFdHEPd0BDPQ--OaP4jKlDmeB-FHTvYrGVbUvnb9Fdzsg3G8f3qJXGDCRHJCEihSgNO1jlsMWiFvUI7Hkk9JdQlPB2hWVFte-1ZHskwE_z4nvdJrqyL0s3tZ-A8LKjcwQjZylizoMLQRLEPAYy0HmXTsjj940y2-2hVOdKmh6xHJ2ylQfC_GTBuOFHG6bXKFrAMRAgymPl5BV_6ghRex0WCzenzlOsBKTLWM4ffSKmc7R0OoFviqXCU04SRDrZh3LM3Zi1l1CQtFtvvLiqLQcxwrWS3BZXlfBY1ik08xemFjr5-fo0qEdaeBN0fhB-oJnt2NSwUmtulzNeHcI48gdhqDptx9qH8Zrp88CUQskuhaOzmSBD-AMSL03h2rIxzuHLSCxZH2GV5bDIW7oZViIA159skW8-_ixUJFmsdXJ0i-Jb0w0Pnqjnl5f7hybJaBOjSMcq3XP0UiMPhq35A8w-Pq3WLqmlTlKV3j6LJ-lQ3lMZYU0Zan1cFTYP_OqzQVuWZh9kzietOknrDSvDbv6u0HlkBvYhSGCpTlk-Lh4cgo42i0nxjMhqonfCe_lLZltIYSkiN-XzY2tMh5kxHlBVXJ6BQmaytHxZN_FyEMnGoY4-epwFjKAsmnoMUlN4capYTZapAd1XBLsJ3D1TmfMdZwyTngjhaK3xvEMewhiWy_qN22a3V0qcjh_y=w770-h433-no?authuser=2"
+                     width="100%">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
