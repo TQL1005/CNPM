@@ -21,9 +21,6 @@ class BaseModel(db.Model):
 
 class TuyenBay(BaseModel):
     name = Column(String(50), nullable=False)
-    so_luot_bay= Column(Integer, default=0)
-    ty_le=Column(Float, default=0)
-    doanh_thu=Column(Float, default=0)
     chuyen_bay = relationship('ChuyenBay', backref='tuyen_bay', lazy=True)
 
     def __str__(self):
@@ -37,7 +34,6 @@ class SanBay(BaseModel):
     chuyen_bay_co_san_bay_di=relationship('ChuyenBay',primaryjoin=("and_(SanBay.id==ChuyenBay.sanBayDi_id)"), backref='san_bay_di', lazy=True)
     chuyen_bay_co_san_bay_den=relationship('ChuyenBay',primaryjoin=("and_(SanBay.id==ChuyenBay.sanBayDen_id)"), backref='san_bay_den', lazy=True)
     #chuyen_bay_co_san_bay = relationship('ChuyenBay', primaryjoin=("and_(SanBay.id==ChuyenBay.sanBayDi_id)"), backref='san_bay', lazy=True)
-
     def __str__(self):
         return self.name
 
@@ -48,7 +44,6 @@ class ThoiDiemBay(BaseModel):
     thoi_gian_bay=Column(Float, nullable=False)
     thoi_gian_dung=Column(Float, nullable=True)
     chuyenbay=relationship('ChuyenBay', backref='thoi_diem_bay', lazy=True)
-
     def __str__(self):
         return self.name
 
@@ -87,7 +82,6 @@ class User(BaseModel, UserMixin):
     active = Column(Boolean, default=True)
     user_role = Column(Enum(UserRole), default=UserRole.EMPLOYEE)
     ve = relationship('Ve', backref='nhan_vien', lazy=True)
-
     def  __str__(self):
         return self.name
 
@@ -95,7 +89,6 @@ class User(BaseModel, UserMixin):
 class MayBay(BaseModel):
     name = Column(String(50), nullable=False)
     hang_ve = relationship('HangVe', backref='may_bay', lazy=True)
-
     def  __str__(self):
         return self.name
 
@@ -106,7 +99,6 @@ class HangVe(BaseModel):
     so_luong_con_lai = Column(Integer, default=80)
     mayBay_id = Column(Integer, ForeignKey(MayBay.id), nullable=False)
     ve = relationship('Ve', backref='hang_ve', lazy=True)
-
     def  __str__(self):
         return self.name
 
@@ -116,7 +108,7 @@ class Ve(BaseModel):
     nhanVien_id = Column(Integer, ForeignKey(User.id), nullable=False)
     chuyenBay_id = Column(Integer, ForeignKey(ChuyenBay.id), nullable=False)
     hangVe_id = Column(Integer, ForeignKey(HangVe.id), nullable=False)
-    khachhang = relationship('KhachHang', backref='ve', lazy=True)
+    khachhang_id = Column(Integer, ForeignKey("khach_hang.id"), nullable=False)
 
     def __str__(self):
         return self.name
@@ -128,7 +120,7 @@ class KhachHang(BaseModel):
     cccd = Column(String(12), nullable=False)
     hinh_cccd = Column(String(100), nullable=False)
     sdt = Column(String(12), nullable=False)
-    ve_id = Column(Integer, ForeignKey(Ve.id), nullable=False)
+    ve = relationship('Ve', backref='khach_hang', lazy=True)
     chuyenBay_id = Column(Integer, ForeignKey(ChuyenBay.id), nullable=False)
 
     def __str__(self):
@@ -147,7 +139,7 @@ if __name__ == '__main__':
         password = str(hashlib.md5('123'.encode('utf-8')).hexdigest())
         u1 = User(name="thao", lastName="thao", username="thao", password=password, avatar="asa")
         u2 = User(name="admin", lastName="admin", username="admin", password=password, avatar="sas", user_role=UserRole.ADMIN)
-        db.session.add_all([u1, u2])
+        db.session.add_all([u1,u2])
         db.session.commit()
         tb1 = TuyenBay(name="TP.HCM-HaNoi")
         db.session.add_all([tb1])
@@ -159,9 +151,10 @@ if __name__ == '__main__':
         hv1 = HangVe(name="Hạng 1", price=600, mayBay_id=mb.id)
         db.session.add_all([hv1])
         db.session.commit()
-        ve1 = Ve(name="Vé TP.HCM-HaNoi", nhanVien_id=u1.id, chuyenBay_id=cb1.id, hangVe_id=hv1.id)
-        db.session.add_all([ve1])
-        db.session.commit()
-        kh1 = KhachHang(name="Lộc", lastName="Trịnh Quang", cccd="123456789", hinh_cccd="sad", sdt="123456", ve_id=ve1.id, chuyenBay_id=cb1.id)
+        kh1 = KhachHang(name="Lộc", lastName="Trịnh Quang", cccd="123456789", hinh_cccd="sad", sdt="123456",
+                        chuyenBay_id=cb1.id)
         db.session.add_all([kh1])
+        db.session.commit()
+        ve1 = Ve(name="Vé TP.HCM-HaNoi", nhanVien_id=u1.id, chuyenBay_id=cb1.id, hangVe_id=hv1.id, khachhang_id=kh1.id)
+        db.session.add_all([ve1])
         db.session.commit()
