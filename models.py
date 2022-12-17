@@ -37,6 +37,7 @@ class SanBay(BaseModel):
     chuyen_bay_co_san_bay_di=relationship('ChuyenBay',primaryjoin=("and_(SanBay.id==ChuyenBay.sanBayDi_id)"), backref='san_bay_di', lazy=True)
     chuyen_bay_co_san_bay_den=relationship('ChuyenBay',primaryjoin=("and_(SanBay.id==ChuyenBay.sanBayDen_id)"), backref='san_bay_den', lazy=True)
     #chuyen_bay_co_san_bay = relationship('ChuyenBay', primaryjoin=("and_(SanBay.id==ChuyenBay.sanBayDi_id)"), backref='san_bay', lazy=True)
+
     def __str__(self):
         return self.name
 
@@ -47,6 +48,7 @@ class ThoiDiemBay(BaseModel):
     thoi_gian_bay=Column(Float, nullable=False)
     thoi_gian_dung=Column(Float, nullable=True)
     chuyenbay=relationship('ChuyenBay', backref='thoi_diem_bay', lazy=True)
+
     def __str__(self):
         return self.name
 
@@ -85,6 +87,7 @@ class User(BaseModel, UserMixin):
     active = Column(Boolean, default=True)
     user_role = Column(Enum(UserRole), default=UserRole.EMPLOYEE)
     ve = relationship('Ve', backref='nhan_vien', lazy=True)
+
     def  __str__(self):
         return self.name
 
@@ -92,6 +95,7 @@ class User(BaseModel, UserMixin):
 class MayBay(BaseModel):
     name = Column(String(50), nullable=False)
     hang_ve = relationship('HangVe', backref='may_bay', lazy=True)
+
     def  __str__(self):
         return self.name
 
@@ -102,6 +106,7 @@ class HangVe(BaseModel):
     so_luong_con_lai = Column(Integer, default=80)
     mayBay_id = Column(Integer, ForeignKey(MayBay.id), nullable=False)
     ve = relationship('Ve', backref='hang_ve', lazy=True)
+
     def  __str__(self):
         return self.name
 
@@ -142,7 +147,7 @@ if __name__ == '__main__':
         password = str(hashlib.md5('123'.encode('utf-8')).hexdigest())
         u1 = User(name="thao", lastName="thao", username="thao", password=password, avatar="asa")
         u2 = User(name="admin", lastName="admin", username="admin", password=password, avatar="sas", user_role=UserRole.ADMIN)
-        db.session.add_all([u1,u2])
+        db.session.add_all([u1, u2])
         db.session.commit()
         tb1 = TuyenBay(name="TP.HCM-HaNoi")
         db.session.add_all([tb1])
