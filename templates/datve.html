@@ -37,7 +37,7 @@
         <select name="hangve" id="hangve" class="selectpicker form-control" data-live-search="true"
                                 title="Chọn hạng vé">
             {% for hv in list_hang_ve %}
-            <option value="{{ hv.id }}" selected>{{ hv.name }}</option>
+            <option value="{{ hv.id }}" selected>{{ hv.name }}  - {{ "{:,.3f}".format(hv.price) }} VND</option>
             {% endfor %}
         </select>
     </div>
