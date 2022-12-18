@@ -1,0 +1,207 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+<h1 class="text-center text-success">THÔNG KÊ VÀ BÁO CÁO</h1>
+
+<div class="row">
+    <div class="col-md-5 col-sm-12">
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Tên Tuyến Bay</th>
+                <th>Doanh thu</th>
+                <th>Số lượt bay</th>
+                <th>Tỷ lệ</th>
+            </tr>
+            {% for s in stats %}
+            <tr>
+                <td>{{ s[0] }}</td>
+                <td>{{ s[1] }}</td>
+                <td>{{ "{:,.3f}".format(s[2]) }} VND</td>
+                <th>{{ s[3] }} lần</th>
+                <th>{{ "{:.2f}".format(100*(s[2]/s[4])) }}%</th>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-7 col-sm-12">
+        <form>
+            <select name="thoi_gian" id="loai_thoi_gian_id" class="selectpicker form-control" data-live-search="true"
+                    title="Chọn loại thời gian" onchange="loai_thoi_gian_change(this)">
+                <option value="1" selected>Year</option>
+                <option value="2">Month</option>
+            </select>
+            <select name="so_lieu" id="so_lieu_id" class="selectpicker form-control" data-live-search="true"
+                    title="Chọn số liệu">
+                <option value="all" selected>all</option>
+                {% for i in range(2000,2023) %}
+                <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+            <select name="so_lieu_year" id="so_lieu_year_id" class="selectpicker form-control so_lieu_year_class" data-live-search="true"
+                    title="Chọn loại thời gian">
+                {% for i in range(1,12) %}
+                <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+                <option value="12" selected>12</option>
+            </select>
+            <input type="submit" onclick="deleteData()">
+            <select name="loai_bieu_do" id="bieu_do_id" class="selectpicker form-control" data-live-search="true"
+                    title="Chọn loại biểu đồ" onchange="thay_doi_bieu_do(this)">
+                <option value="1" selected>pie</option>
+                <option value="2">bar</option>
+                <option value="3">doughnut</option>
+                <option value="4">polarArea</option>
+            </select>
+            <!--            <div class="form-group">-->
+            <!--                <label>Từ ngày</label>-->
+            <!--                <input type="date" name="from_date" class="form-control"/>-->
+            <!--            </div>-->
+            <!--            <div class="form-group">-->
+            <!--                <label>Đến ngày</label>-->
+            <!--                <input type="date" name="to_date" class="form-control"/>-->
+            <!--            </div>-->
+        </form>
+        <canvas id="revenueStats"></canvas>
+    </div>
+</div>
+
+<a href="/api/data/phieuthongke" class="btn btn-info btn-thongke" style="display:none">xuất báo cáo thống kê</a>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/my-chart.js') }}"></script>
+<script src="{{ url_for('static', filename='js/add-data.js') }}"></script>
+<script>
+    let labels = []
+    let data = []
+    let change = document.getElementById('bieu_do_id');
+    let type = change.options[change.selectedIndex].text;
+    {% for s in stats %}
+    labels.push('{{ s[1] }}')
+    data.push({{ s[2] }})
+    {% endfor %}
+    let myChart
+    const ctx = document.getElementById('revenueStats');
+    window.onload = function() {
+
+
+        let change1 = document.getElementsByClassName('so_lieu_year_class');
+        let change2 = change1[0];
+        change2.style.display = "none";
+        myChart = new Chart(ctx, {
+            type: type,
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Số lượt bay',
+                data: data,
+                borderWidth: 1,
+                backgroundColor: ['red', 'green', 'blue', 'rgba(198, 111, 90, 0.8)', 'rgba(255, 199, 120, 0.8)']
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+
+        {% for s in stats %}
+        addData({{ s[0] }}, '{{ s[1] }}', {{ s[2] }}, {{ s[3] }}, {{ s[4] }}, {{ 100*(s[2]/s[4]) }})
+        {% endfor %}
+    }
+
+
+
+
+    function thay_doi_bieu_do(obj){
+        myChart.destroy();
+        let change = document.getElementById('bieu_do_id');
+        let type = change.options[change.selectedIndex].text;
+        myChart = new Chart(ctx, {
+            type: type,
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Số lượt bay',
+                data: data,
+                borderWidth: 1,
+                backgroundColor: ['red', 'green', 'blue', 'rgba(198, 111, 90, 0.8)', 'rgba(255, 199, 120, 0.8)']
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+    };
+
+
+    function loai_thoi_gian_change(obj) {
+        let change = document.getElementById('loai_thoi_gian_id');
+        let type = change.options[change.selectedIndex].text;
+        let change1 = document.getElementsByClassName('so_lieu_year_class');
+        let change2 = change1[0];
+        let btn = document.getElementsByClassName('btn-thongke');
+        let btn1 = btn[0];
+        if (type == "Year") {
+            change2.style.display = "none";
+            btn1.style.display = "none";
+        }
+        else {
+            change2.style.display = "block";
+            btn1.style.display = "block";
+        }
+    }
+
+<!--    function adddata(id, name, price, so_luot_bay, tong_doanh_thu, ty_le){-->
+<!--        fetch('/api/data', {-->
+<!--        method: "POST",-->
+<!--        body: JSON.stringify({-->
+<!--            'id': id,-->
+<!--            'name': name,-->
+<!--            'price': price,-->
+<!--            'so_luot_bay': so_luot_bay,-->
+<!--            'ty_le': ty_le,-->
+<!--            'tong_doanh_thu': tong_doanh_thu,-->
+<!--        }),-->
+<!--        headers: {-->
+<!--            'Content-Type': 'application/json'-->
+<!--        }-->
+<!--     }).then(function(res){-->
+<!--        console.info(res)-->
+<!--        return res.json()-->
+<!--     }).then(function(data){-->
+<!--        console.info(data)-->
+<!--     }).catch(function(err){-->
+<!--        console.info(err)-->
+<!--     })-->
+<!--    }-->
+
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+<script src="{{ url_for('static', filename='js/dropdownlist.js') }}"></script>
+{% endblock %}
