@@ -71,7 +71,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{{ url_for('static', filename='js/my-chart.js') }}"></script>
-<script src="{{ url_for('static', filename='js/add-data.js') }}"></script>
 <script>
     let labels = []
     let data = []
@@ -108,10 +107,6 @@
               }
             }
           });
-
-        {% for s in stats %}
-        addData({{ s[0] }}, '{{ s[1] }}', {{ s[2] }}, {{ s[3] }}, {{ s[4] }}, {{ 100*(s[2]/s[4]) }})
-        {% endfor %}
     }
 
 

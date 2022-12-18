@@ -39,7 +39,6 @@
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
             crossorigin="anonymous"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/add-data.js') }}"></script>
 </head>
 <body>
 <div class="align-items-center d-flex">
@@ -48,11 +47,6 @@
             <tr>
                 <th colspan="5">
                     BÁO CÁO THỐNG KÊ DOANH THU
-                </th>
-            </tr>
-            <tr>
-                <th colspan="5">
-                    Tháng:
                 </th>
             </tr>
             <tr>
@@ -72,7 +66,7 @@
                     Tỷ lệ
                 </th>
             </tr>
-            {% for c in session['data1'].values() %}
+            {% for c in json_object %}
             <tr>
                 <td>
                     {{ c.id }}
@@ -90,12 +84,12 @@
                     {{ c.ty_le }}
                 </td>
             </tr>
+            {% endfor %}
             <tr>
                 <th colspan="5">
-                    Tổng doanh Thu: {{ c.tong_doanh_thu }}
+                    Tổng doanh Thu: {{ json_object[0].tong_doanh_thu }}
                 </th>
             </tr>
-            {% endfor %}
         </table>
     </div>
 </div>

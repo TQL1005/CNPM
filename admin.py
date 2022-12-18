@@ -7,6 +7,7 @@ from flask import redirect, request, session
 from wtforms import TextAreaField
 from wtforms.widgets import TextArea
 from datetime import datetime
+import json
 
 
 class CKTextAreaWidget(TextArea):
@@ -63,58 +64,35 @@ class StatsView(BaseView):
         so_lieu_year = request.args.get('so_lieu_year', 12)
         #stats = dao.tuyen_bay_count_stats(year=year)
         stats = dao.tuyen_bay_month_doanh_thu_stats(year=year, so_lieu_year=so_lieu_year, loai_thoi_gian=loai_thoi_gian)
+        stats1 = []
+        for s in stats:
+            stats2 = {
+                "id": s[0],
+                "name": s[1],
+                "price": s[2],
+                "so_luot_bay": s[3],
+                "tong_doanh_thu": s[4],
+                "ty_le": 100 * (s[2] / s[4])
+            }
+            stats1.append(stats2)
+        json_object = json.dumps(stats1)
+        with open("data/sample.json", "w", encoding='utf-8') as outfile:
+            outfile.write(json_object)
         return self.render('admin/stats.html', stats=stats)
     def is_accessible(self):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
 
-# @app.route('/api/data', methods=['post'])
-# def add_data():
-#     data = request.json
-#     id = str(data['id'])
-#     data1 = session['data1'] if 'data1' in session else {}
-#     import pdb;
-#     pdb.set_trace()
-#     if id in data1:
-#         name = data['name']
-#         price = data['price']
-#         so_luot_bay = data['so_luot_bay']
-#         ty_le = data['ty_le']
-#         tong_doanh_thu = data['tong_doanh_thu']
-#         thang = data['thang']
-#
-#         data1[id] = {
-#             "id": id,
-#             "name": name,
-#             "price": price,
-#             "so_luot_bay": so_luot_bay,
-#             "ty_le": ty_le,
-#             "tong_doanh_thu": tong_doanh_thu,
-#             "thang": thang,
-#         }
-#     else:
-#         name = data['name']
-#         price = data['price']
-#         so_luot_bay = data['so_luot_bay']
-#         ty_le = data['ty_le']
-#         tong_doanh_thu = data['tong_doanh_thu']
-#         thang = data['thang']
-#
-#         data1[id] = {
-#             "id": id,
-#             "name": name,
-#             "price": price,
-#             "so_luot_bay": so_luot_bay,
-#             "ty_le": ty_le,
-#             "tong_doanh_thu": tong_doanh_thu,
-#             "thang": thang,
-#         }
-#
-#     session['data1'] = data1
-#     pass
+class LapLich(BaseView):
+    @expose('/')
+    def index(self):
+        return self.render('admin/laplichchuyenbay.html')
+    def is_accessible(self):
+        return current_user.is_authenticated
 
 
 admin = Admin(app=app, name='QUẢN LÝ CHUYẾN BAY', template_mode='bootstrap4')
+admin.add_view(LapLich(name="Lập lịch chuyến bay"))
 admin.add_view(AuthenticatedModalViewAdmin(User, db.session, name='Người dùng'))
 admin.add_view(AuthenticatedModalViewAdmin(SanBay, db.session, name='Sân bay'))
 admin.add_view(AuthenticatedModalView(KhachHang, db.session, name='Khách hàng'))

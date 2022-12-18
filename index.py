@@ -68,46 +68,6 @@ def logout_my_user():
     return redirect('/login')
 
 
-@app.route('/api/data', methods=['post'])
-def add_data():
-    data = request.json
-    id = str(data['id'])
-    data1 = session['data1'] if 'data1' in session else {}
-    if id in data1:
-        pass
-    else:
-        name = data['name']
-        price = data['price']
-        so_luot_bay = data['so_luot_bay']
-        ty_le = data['ty_le']
-        tong_doanh_thu = data['tong_doanh_thu']
-
-        data1[id] = {
-            "id": id,
-            "name": name,
-            "price": price,
-            "so_luot_bay": so_luot_bay,
-            "ty_le": ty_le,
-            "tong_doanh_thu": tong_doanh_thu,
-        }
-
-    session['data1'] = data1
-    json_object = json.dumps([session.get('data1')])
-    with open("data/sample.json", "w", encoding='utf-8') as outfile:
-        outfile.write(json_object)
-    # import pdb;
-    # pdb.set_trace()
-    return jsonify(session.get('data1'))
-
-
-@app.route('/api/data', methods=['delete'])
-def delete_data():
-    session.pop('data1', None)
-    # import pdb;
-    # pdb.set_trace()
-    return jsonify("test")
-
-
 @login.user_loader
 def load_user(user_id):
     return dao.get_user_by_id(user_id)
