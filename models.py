@@ -105,7 +105,7 @@ class HangVe(BaseModel):
 
 class Ve(BaseModel):
     name = Column(String(50), nullable=False)
-    nhanVien_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    nhanVien_id = Column(Integer, ForeignKey(User.id), nullable=True)
     chuyenBay_id = Column(Integer, ForeignKey(ChuyenBay.id), nullable=False)
     hangVe_id = Column(Integer, ForeignKey(HangVe.id), nullable=False)
     khachhang_id = Column(Integer, ForeignKey("khach_hang.id"), nullable=False)

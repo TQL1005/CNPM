@@ -1,0 +1,56 @@
+{% extends "layout/base.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center text-danger">ĐẶT VÉ CHUYẾN BAY {{ cb.name }}</h1>
+
+<form method="post" enctype="multipart/form-data">
+
+    <div class="form-floating mb-3 mt-3">
+        <input type="text" class="form-control" id="name" placeholder="Nhập tên" name="name">
+        <label for="name">Tên</label>
+    </div>
+
+    <div class="form-floating mt-3 mb-3">
+        <input type="text" class="form-control" id="lastname" placeholder="Nhập họ" name="lastname">
+        <label for="lastname">Nhập họ</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        <input type="text" class="form-control" id="cccd" placeholder="Nhập cccd" name="cccd">
+        <label for="cccd">cccd</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        <input type="file" class="form-control" id="hinh_cccd" placeholder="choose file" name="hinh_cccd">
+        <label for="hinh_cccd">hình cccd</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        <input type="text" class="form-control" id="sdt" placeholder="nhập sdt" name="sdt">
+        <label for="sdt">sdt</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        <select name="hangve" id="hangve" class="selectpicker form-control" data-live-search="true"
+                                title="Chọn hạng vé">
+            {% for hv in list_hang_ve %}
+            <option value="{{ hv.id }}" selected>{{ hv.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        <select name="chuyenbay" id="chuyenbay" class="selectpicker form-control" data-live-search="true"
+                                title="Chuyến bay">
+            <option value="{{ cb.id }}" selected>{{ cb.name }}</option>
+        </select>
+    </div>
+
+    <div>
+        <input type="submit" class="btn btn-success" />
+    </div>
+</form>
+{% endblock %}

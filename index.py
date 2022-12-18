@@ -12,7 +12,9 @@ def home():
     diem_di= request.args.get('di')
     diem_den= request.args.get('den')
 
-    return render_template('index.html', list_san_bay=list_san_bay)
+    list_chuyen_bay= dao.tim_chuyen_bay(diem_di=diem_di, diem_den=diem_den)
+
+    return render_template('index.html', list_san_bay=list_san_bay, list_chuyen_bay=list_chuyen_bay)
 
 
 # @app.route('/search', methods=['get'])
@@ -66,6 +68,23 @@ def login_my_user():
 def logout_my_user():
     logout_user()
     return redirect('/login')
+
+
+@app.route('/datve/<int:chuyenBay_id>', methods=['post', 'get'])
+def dat_ve(chuyenBay_id):
+    cb = dao.get_chuyen_bay_id(chuyenBay_id)
+    list_hang_ve = dao.load_hang_ve()
+    if request.method.__eq__('POST'):
+        name = request.form['name']
+        last_name = request.form['lastname']
+        cccd = request.form['cccd']
+        hinh_cccd = request.files['hinh_cccd']
+        sdt = request.form['sdt']
+        chuyen_bay = request.form['chuyenbay']
+        hang_ve = request.form['hangve']
+        dao.dat_ve_online(name=name,lastname=last_name,cccd=cccd,hinh_cccd=hinh_cccd,sdt=sdt,chuyen_bay=chuyen_bay,hang_ve=hang_ve)
+
+    return render_template('datve.html', cb=cb, list_hang_ve=list_hang_ve)
 
 
 @login.user_loader
