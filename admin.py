@@ -83,23 +83,14 @@ class StatsView(BaseView):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
 
-class LapLich(BaseView):
-    @expose('/')
-    def index(self):
-        return self.render('admin/laplichchuyenbay.html')
-    def is_accessible(self):
-        return current_user.is_authenticated
-
-
 admin = Admin(app=app, name='QUẢN LÝ CHUYẾN BAY', template_mode='bootstrap4')
-admin.add_view(LapLich(name="Lập lịch chuyến bay"))
 admin.add_view(AuthenticatedModalViewAdmin(User, db.session, name='Người dùng'))
 admin.add_view(AuthenticatedModalViewAdmin(SanBay, db.session, name='Sân bay'))
 admin.add_view(AuthenticatedModalView(KhachHang, db.session, name='Khách hàng'))
 admin.add_view(AuthenticatedModalViewAdmin(ThoiDiemBay, db.session, name='Thời điểm bay'))
 admin.add_view(AuthenticatedModalViewAdmin(MayBay, db.session, name='Máy bay'))
-admin.add_view(AuthenticatedModalViewAdmin(ChuyenBay, db.session, name='Chuyến bay'))
-admin.add_view(AuthenticatedModalView(TuyenBay, db.session, name='Tuyến bay'))
+admin.add_view(AuthenticatedModalView(ChuyenBay, db.session, name='Chuyến bay'))
+admin.add_view(AuthenticatedModalViewAdmin(TuyenBay, db.session, name='Tuyến bay'))
 admin.add_view(AuthenticatedModalView(HangVe, db.session, name='Hạng vé'))
 admin.add_view(AuthenticatedModalView(Ve, db.session, name='Vé'))
 
