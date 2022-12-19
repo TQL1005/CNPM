@@ -22,11 +22,6 @@ def home():
 #     return render_template('search.html')
 
 
-@app.route('/banve')
-def ban_ve():
-    return render_template('banve.html')
-
-
 
 @app.route('/admin-login', methods=['post'])
 def admin_login():
