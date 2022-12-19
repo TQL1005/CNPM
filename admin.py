@@ -83,16 +83,50 @@ class StatsView(BaseView):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
 
+class LapLich(BaseView):
+    @expose('/')
+    def index(self):
+        list_san_bay = dao.load_san_bay()
+        list_tuyen_bay = dao.load_tuyen_bay()
+        ten_chuyen_bay = request.args.get('cb_name')
+        tb_id = request.args.get('tuyen_bay')
+        diem_di_id = request.args.get('di')
+        den_id = request.args.get('den')
+        ngay_gio = request.args.get('ngay_gio')
+        thoi_gian_bay = request.args.get('thoi_gian_bay')
+        hang1 = request.args.get('hang1')
+        hang2 = request.args.get('hang2')
+        tgs = request.args.getlist('tg')
+        thoi_gian_dung = request.args.get('thoi_gian_dung')
+
+        dao.LapLichChuyenBay(name=ten_chuyen_bay, diem_di_id=diem_di_id, diem_den_id=den_id, ngay_gio=ngay_gio, thoi_gian_bay=thoi_gian_bay, hang1=hang1, hang2=hang2, tgs=tgs, thoi_gian_dung=thoi_gian_dung, tb_id=tb_id)
+
+        return self.render('admin/laplichchuyenbay.html', list_san_bay=list_san_bay, list_tuyen_bay=list_tuyen_bay)
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+
+class ThayDoiQuiDinh(BaseView):
+    @expose('/')
+    def index(self):
+        list_san_bay = dao.load_san_bay()
+        return self.render('admin/thaydoiquidinh.html', list_san_bay=list_san_bay)
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+
 admin = Admin(app=app, name='QUẢN LÝ CHUYẾN BAY', template_mode='bootstrap4')
+admin.add_view(LapLich(name="Lập lịch chuyến bay"))
 admin.add_view(AuthenticatedModalViewAdmin(User, db.session, name='Người dùng'))
 admin.add_view(AuthenticatedModalViewAdmin(SanBay, db.session, name='Sân bay'))
 admin.add_view(AuthenticatedModalView(KhachHang, db.session, name='Khách hàng'))
 admin.add_view(AuthenticatedModalViewAdmin(ThoiDiemBay, db.session, name='Thời điểm bay'))
 admin.add_view(AuthenticatedModalViewAdmin(MayBay, db.session, name='Máy bay'))
-admin.add_view(AuthenticatedModalView(ChuyenBay, db.session, name='Chuyến bay'))
-admin.add_view(AuthenticatedModalViewAdmin(TuyenBay, db.session, name='Tuyến bay'))
+admin.add_view(AuthenticatedModalViewAdmin(ChuyenBay, db.session, name='Chuyến bay'))
+admin.add_view(AuthenticatedModalView(TuyenBay, db.session, name='Tuyến bay'))
 admin.add_view(AuthenticatedModalView(HangVe, db.session, name='Hạng vé'))
 admin.add_view(AuthenticatedModalView(Ve, db.session, name='Vé'))
+admin.add_view(ThayDoiQuiDinh(name="Thay đổi qui định"))
 
 admin.add_view(StatsView(name="Báo cáo thống kê"))
 admin.add_view(LogoutView(name="Đăng xuất"))

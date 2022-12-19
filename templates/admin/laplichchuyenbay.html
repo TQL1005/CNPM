@@ -1,0 +1,82 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+<h1 class="align-items-center">LỊCH CHUYẾN BAY</h1>
+<div class="align-items-center">
+    <form method="get">
+        <table class="table">
+            <tr>
+                <td>
+                    <span>Tên chuyến bay</span>
+                    <input type="text" name="cb_name">
+                </td>
+                <td>
+                    <span>Tuyến bay</span>
+                    <select name="tuyen_bay" id="tb_id" class="form-control"
+                                title="Chọn tuyến di">
+                            {% for san_bay in list_tuyen_bay %}
+                            <option value="{{ san_bay.id }}">{{ san_bay.name }}</option>
+                            {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Sân bay di:</span>
+                    <select name="di" id="diem_di" class="form-control"
+                                title="Chọn điểm đi">
+                            {% for san_bay in list_san_bay %}
+                            <option value="{{ san_bay.id }}">{{ san_bay.name }}</option>
+                            {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <span>Sân bay đến:</span>
+                    <select name="den" id="diem_den" class="form-control"
+                                title="Chọn điểm đến">
+                            {% for san_bay in list_san_bay %}
+                            <option value="{{ san_bay.id }}">{{ san_bay.name }}</option>
+                            {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Ngày-giờ</span>
+                    <input type="datetime-local" value="2000-01-01T00:00:00" name="ngay_gio">
+                </td>
+                <td>
+                    <span>Thời gian bay</span>
+                    <input type="number"  name="thoi_gian_bay">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Số lượng ghế hạng 1: </span>
+                    <input type="number" name="hang1">
+                </td>
+                <td>
+                    <span>Số lượng ghế hạng 2: </span>
+                    <input type="number" name="hang2">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Sân bay trung gian</span>
+                    <select name="tg" id="san_bay_tg" class="form-control"
+                                title="Chọn điểm đến" multiple>
+                            {% for san_bay in list_san_bay %}
+                            <option value="{{ san_bay.id }}">{{ san_bay.name }}</option>
+                            {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <span>Thời gian dừng</span>
+                    <input type="number" name="thoi_gian_dung">
+                </td>
+            </tr>
+        </table>
+        <button type="submit">lập lịch</button>
+    </form>
+</div>
+{% endblock %}

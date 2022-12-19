@@ -131,37 +131,38 @@ def tuyen_bay_month_doanh_thu_stats(year, so_lieu_year, loai_thoi_gian):
             extract('year', ChuyenBay.created_date) == year).filter(extract('month', ChuyenBay.created_date) == so_lieu_year).order_by(TuyenBay.id).group_by(TuyenBay.id).all()
 
 
-# def LapLich(name, diem_di_id, diem_den_id, ngay_gio, thoi_gian_bay, hang1, hang2, tgs, thoi_gian_dung, tb_id):
-#     san_bay_di = SanBay.query.filter(SanBay.id.__eq__(int(diem_di_id))).first()
-#     san_bay_den = SanBay.query.filter(SanBay.id.__eq__(int(diem_den_id))).first()
-#     tuyen_bay = TuyenBay.query.filter(TuyenBay.id.__eq__(int(tb_id))).first()
-#
-#     mb = MayBay(name="test")
-#     db.session.add(mb)
-#     db.session.commit()
-#
-#     hv1 = HangVe(name="hang 1", price=500, so_luong_con_lai=hang1, mayBay_id = mb.id)
-#     hv2 = HangVe(name="hang 2", price=500, so_luong_con_lai=hang2, mayBay_id = mb.id)
-#     db.session.add_all([hv1,hv2])
-#     db.session.commit()
-#
-#     tdb = ThoiDiemBay(name="test", ngay_gio_bay = ngay_gio, thoi_gian_bay = thoi_gian_bay, thoi_gian_dung=thoi_gian_dung)
-#     db.session.add(tdb)
-#     db.session.commit()
-#
-#     cb = ChuyenBay(name=name, sanBayDi_id = san_bay_di.id, sanBayDen_id = san_bay_den.id, tuyenBay_id=tuyen_bay.id)
-#     db.session.add(cb)
-#     db.session.commit()
-#
-#     mbtcb = MayBayThuocChuyenBay(mayBay_id=mb.id, chuyenBay_id=cb.id)
-#     db.session.add(mbtcb)
-#     db.session.commit()
-#
-#     for tg in tgs:
-#         trung_gian = SanBay.query.filter(SanBay.id.__eq__(int(tg))).first()
-#         cbcsbtg = ChuyenBayCoSanBayTrungGian(chuyenBay_id = cb.id, sanBayTrungGian_id = trung_gian.id)
-#         db.session.add(cbcsbtg)
-#         db.session.commit()
+def LapLichChuyenBay(name, diem_di_id, diem_den_id, ngay_gio, thoi_gian_bay, hang1, hang2, tgs, thoi_gian_dung, tb_id):
+    if diem_di_id:
+        san_bay_di = SanBay.query.filter(SanBay.id.__eq__(int(diem_di_id))).first()
+        san_bay_den = SanBay.query.filter(SanBay.id.__eq__(int(diem_den_id))).first()
+        tuyen_bay = TuyenBay.query.filter(TuyenBay.id.__eq__(int(tb_id))).first()
+
+        mb = MayBay(name="test")
+        db.session.add(mb)
+        db.session.commit()
+
+        hv1 = HangVe(name="hang 1", price=500, so_luong_con_lai=hang1, mayBay_id = mb.id)
+        hv2 = HangVe(name="hang 2", price=500, so_luong_con_lai=hang2, mayBay_id = mb.id)
+        db.session.add_all([hv1,hv2])
+        db.session.commit()
+
+        tdb = ThoiDiemBay(name="test", ngay_gio_bay = ngay_gio, thoi_gian_bay = thoi_gian_bay, thoi_gian_dung=thoi_gian_dung)
+        db.session.add(tdb)
+        db.session.commit()
+
+        cb = ChuyenBay(name=name, sanBayDi_id = san_bay_di.id, sanBayDen_id = san_bay_den.id, tuyenBay_id=tuyen_bay.id, thoiDiemBay_id=tdb.id)
+        db.session.add(cb)
+        db.session.commit()
+
+        cb.may_bay.append(mb)
+        db.session.add(cb)
+        db.session.commit()
+
+        for tg in tgs:
+            trung_gian = SanBay.query.filter(SanBay.id.__eq__(int(tg))).first()
+            cb.san_bay_trung_gian.append(trung_gian)
+            db.session.add(cb)
+            db.session.commit()
 
 
 def tim_chuyen_bay(diem_di,diem_den):
