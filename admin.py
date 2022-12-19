@@ -86,6 +86,10 @@ class StatsView(BaseView):
 class LapLich(BaseView):
     @expose('/')
     def index(self):
+        json_object = []
+        with open('data/quidinh.json', 'r', encoding='utf-8') as openfile:
+            json_object = json.loads(openfile.read())
+
         list_san_bay = dao.load_san_bay()
         list_tuyen_bay = dao.load_tuyen_bay()
         ten_chuyen_bay = request.args.get('cb_name')
@@ -101,7 +105,7 @@ class LapLich(BaseView):
 
         dao.LapLichChuyenBay(name=ten_chuyen_bay, diem_di_id=diem_di_id, diem_den_id=den_id, ngay_gio=ngay_gio, thoi_gian_bay=thoi_gian_bay, hang1=hang1, hang2=hang2, tgs=tgs, thoi_gian_dung=thoi_gian_dung, tb_id=tb_id)
 
-        return self.render('admin/laplichchuyenbay.html', list_san_bay=list_san_bay, list_tuyen_bay=list_tuyen_bay)
+        return self.render('admin/laplichchuyenbay.html', list_san_bay=list_san_bay, list_tuyen_bay=list_tuyen_bay, json_object=json_object)
     def is_accessible(self):
         return current_user.is_authenticated
 
@@ -110,9 +114,23 @@ class ThayDoiQuiDinh(BaseView):
     @expose('/')
     def index(self):
         list_san_bay = dao.load_san_bay()
+        thoi_gian_bay_toi_thieu = request.args.get('thoi_gian_bay_toi_thieu')
+        thoi_gian_dung_toi_thieu = request.args.get('thoi_gian_dung_toi_thieu')
+        thoi_gian_dung_toi_da = request.args.get('thoi_gian_dung_toi_da')
+
+        qui_dinh = {
+            "thoi_gian_bay_toi_thieu" : thoi_gian_bay_toi_thieu,
+            "thoi_gian_dung_toi_thieu":thoi_gian_dung_toi_thieu,
+            "thoi_gian_dung_toi_da":thoi_gian_dung_toi_da
+        }
+
+        json_object = json.dumps(qui_dinh)
+        with open("data/quidinh.json", "w", encoding='utf-8') as outfile:
+            outfile.write(json_object)
+
         return self.render('admin/thaydoiquidinh.html', list_san_bay=list_san_bay)
     def is_accessible(self):
-        return current_user.is_authenticated
+        return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
 
 admin = Admin(app=app, name='QUẢN LÝ CHUYẾN BAY', template_mode='bootstrap4')

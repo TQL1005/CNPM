@@ -1,0 +1,28 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+<h1 class="align-items-center">LỊCH CHUYẾN BAY</h1>
+<div class="align-items-center">
+    <form method="get">
+        <table class="table">
+            <tr>
+                <td>
+                    <span>Thời gian bay tối thiểu</span>
+                    <input type="number" name="thoi_gian_bay_toi_thieu">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Thời gian dừng tối thiểu</span>
+                    <input type="number" name="thoi_gian_dung_toi_thieu">
+                </td>
+                <td>
+                    <span>Thời gian dừng tối đa</span>
+                    <input type="number" name="thoi_gian_dung_toi_da">
+                </td>
+            </tr>
+        </table>
+        <button type="submit">submit</button>
+    </form>
+</div>
+{% endblock %}

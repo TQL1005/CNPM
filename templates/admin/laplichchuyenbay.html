@@ -46,8 +46,13 @@
                     <input type="datetime-local" value="2000-01-01T00:00:00" name="ngay_gio">
                 </td>
                 <td>
-                    <span>Thời gian bay</span>
-                    <input type="number"  name="thoi_gian_bay">
+                    <span>Sân bay trung gian</span>
+                    <select name="tg" id="san_bay_tg" class="form-control"
+                                title="Chọn điểm đến" multiple>
+                            {% for san_bay in list_san_bay %}
+                            <option value="{{ san_bay.id }}">{{ san_bay.name }}</option>
+                            {% endfor %}
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -61,19 +66,25 @@
                 </td>
             </tr>
             <tr>
+                {% if json_object %}
                 <td>
-                    <span>Sân bay trung gian</span>
-                    <select name="tg" id="san_bay_tg" class="form-control"
-                                title="Chọn điểm đến" multiple>
-                            {% for san_bay in list_san_bay %}
-                            <option value="{{ san_bay.id }}">{{ san_bay.name }}</option>
-                            {% endfor %}
-                    </select>
+                    <span>Thời gian bay</span>
+                    <input type="number"  name="thoi_gian_bay" min="{{ json_object.thoi_gian_bay_toi_thieu }}">
                 </td>
                 <td>
                     <span>Thời gian dừng</span>
-                    <input type="number" name="thoi_gian_dung">
+                    <input type="number" name="thoi_gian_dung" min="{{ json_object.thoi_gian_dung_toi_thieu }}" max="{{ json_object.thoi_gian_dung_toi_da }}">
                 </td>
+                {% else %}
+                <td>
+                    <span>Thời gian bay</span>
+                    <input type="number"  name="thoi_gian_bay" min="30">
+                </td>
+                <td>
+                    <span>Thời gian dừng</span>
+                    <input type="number" name="thoi_gian_dung" min="20" max="30">
+                </td>
+                {% endif %}
             </tr>
         </table>
         <button type="submit">lập lịch</button>
